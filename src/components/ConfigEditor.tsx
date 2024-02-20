@@ -1,27 +1,26 @@
-import { useContext, useMemo } from 'react'
 import MonacoEditor, { OnChange } from '@monaco-editor/react'
-import { MermaidContext, mermaidContext } from '../mermaidContext'
-import defaultConfigValue from '../assets/config.json'
+
+import { useStore } from '../store'
+
 const ConfigEditor = () => {
-  const { setConfig } = useContext(mermaidContext) as MermaidContext
+  const mermaid = useStore(state => state.mermaid)
+  const setMermaid = useStore(state => state.setMermaid)
+
   const onChange: OnChange = value => {
-    setConfig(value as string)
+    setMermaid(value as string)
   }
-  return useMemo(
-    () => (
-      <MonacoEditor
-        height="100%"
-        onChange={onChange}
-        language="json"
-        defaultValue={JSON.stringify(defaultConfigValue, null, 2)}
-        options={{
-          minimap: {
-            enabled: false
-          }
-        }}
-      ></MonacoEditor>
-    ),
-    []
+  return (
+    <MonacoEditor
+      height="100%"
+      onChange={onChange}
+      language="json"
+      value={mermaid}
+      options={{
+        minimap: {
+          enabled: false
+        }
+      }}
+    ></MonacoEditor>
   )
 }
 

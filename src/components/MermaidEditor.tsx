@@ -1,32 +1,37 @@
 import MonacoEditor, { OnChange, OnMount } from '@monaco-editor/react'
 import initEditor from 'monaco-mermaid'
-import { memo, useContext, useMemo } from 'react'
-import { MermaidContext, mermaidContext } from '../mermaidContext'
+import { useStore } from '../store'
 
 const MermaidEditor = () => {
-  const { setCode } = useContext(mermaidContext) as MermaidContext
+  const code = useStore(state => state.code)
+  const setCode = useStore(state => state.setCode)
+  const config = useStore(state => state.config)
+  const setConfig = useStore(state => state.setConfig)
+  const editorMode = useStore(state => state.editorMode)
   const onChange: OnChange = value => {
-    setCode(value as string)
+    if (editorMode === 'code') {
+      setCode(value as string)
+    } else {
+      setConfig(value as string)
+    }
   }
   const onMount: OnMount = (_, monaco) => {
     initEditor(monaco)
   }
-  return useMemo(
-    () => (
-      <MonacoEditor
-        height="100%"
-        defaultLanguage="mermaid"
-        onChange={onChange}
-        options={{
-          minimap: {
-            enabled: false
-          }
-        }}
-        onMount={onMount}
-      />
-    ),
-    []
+  return (
+    <MonacoEditor
+      height="100%"
+      language={editorMode === 'code' ? 'mermaid' : 'json'}
+      value={editorMode === 'code' ? code : config}
+      onChange={onChange}
+      options={{
+        minimap: {
+          enabled: false
+        }
+      }}
+      onMount={onMount}
+    />
   )
 }
 
-export default memo(MermaidEditor)
+export default MermaidEditor

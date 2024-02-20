@@ -18,7 +18,9 @@ const RightContainer = () => {
         height: '100%',
         borderRadius: '5px',
         overflow: 'hidden',
-        bgcolor: 'white'
+        bgcolor: 'white',
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
       <AppBar
@@ -59,7 +61,9 @@ const RightContainer = () => {
           </Button>
         </Box>
       </AppBar>
-      <View />
+      <Box sx={{ flex: 1, overflow: 'hidden' }}>
+        <View />
+      </Box>
     </Box>
   )
 }

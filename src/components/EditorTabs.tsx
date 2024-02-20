@@ -1,4 +1,4 @@
-import { useContext, useState, PropsWithChildren, FC } from 'react'
+import { useState } from 'react'
 import {
   Box,
   AppBar,
@@ -11,14 +11,15 @@ import {
 } from '@mui/material'
 import SyncRoundedIcon from '@mui/icons-material/SyncRounded'
 import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded'
-import { MermaidContext, mermaidContext } from '../mermaidContext'
+
 import MermaidEditor from './MermaidEditor'
-import ConfigEditor from './ConfigEditor'
+
+import { useStore } from '../store'
 
 const EditorTabs = () => {
-  const { isAutoSync, setIsAutoSync } = useContext(
-    mermaidContext
-  ) as MermaidContext
+  const autoSync = useStore.use.autoSync()
+  const setAutoSync = useStore.use.setAutoSync()
+  const setEditorMode = useStore.use.setEditorMode()
   const [tabIndex, setTabIndex] = useState(0)
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -34,7 +35,10 @@ const EditorTabs = () => {
         <Box>
           <Tabs
             value={tabIndex}
-            onChange={(_, value) => setTabIndex(value)}
+            onChange={(_, value) => {
+              setTabIndex(value)
+              setEditorMode(value === 0 ? 'code' : 'config')
+            }}
             indicatorColor="secondary"
             textColor="inherit"
           >
@@ -58,13 +62,13 @@ const EditorTabs = () => {
             control={
               <Switch
                 color="secondary"
-                checked={isAutoSync}
-                onChange={(_, value) => setIsAutoSync(value)}
+                checked={autoSync}
+                onChange={(_, value) => setAutoSync(value)}
               />
             }
           ></FormControlLabel>
 
-          {!isAutoSync && (
+          {!autoSync && (
             <IconButton size="small">
               <SyncRoundedIcon color="secondary" />
             </IconButton>
@@ -80,35 +84,9 @@ const EditorTabs = () => {
         </Box>
       </AppBar>
       <Box sx={{ flex: 1 }}>
-        <TabPanel value={tabIndex} index={0}>
-          <MermaidEditor />
-        </TabPanel>
-        <TabPanel value={tabIndex} index={1}>
-          <ConfigEditor />
-        </TabPanel>
+        <MermaidEditor />
       </Box>
     </Box>
-  )
-}
-
-type TabPanelProps = PropsWithChildren<{
-  value: number
-  index: number
-}>
-
-const TabPanel: FC<TabPanelProps> = props => {
-  const { children, index, value } = props
-
-  return (
-    <div
-      style={{ height: '100%' }}
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-    >
-      {value === index && children}
-    </div>
   )
 }
 
