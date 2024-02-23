@@ -15,11 +15,14 @@ import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded'
 import MermaidEditor from './MermaidEditor'
 
 import { useStore } from '../store'
+import SelectSample from './SelectSample'
 
 const EditorTabs = () => {
   const autoSync = useStore.use.autoSync()
   const setAutoSync = useStore.use.setAutoSync()
   const setEditorMode = useStore.use.setEditorMode()
+  const setUpdateDiagram = useStore.use.setUpdateDiagram()
+
   const [tabIndex, setTabIndex] = useState(0)
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -42,19 +45,12 @@ const EditorTabs = () => {
             indicatorColor="secondary"
             textColor="inherit"
           >
-            <Tab
-              // icon={<CodeRoundedIcon fontSize="small" />}
-              // iconPosition="start"
-              label="code"
-            ></Tab>
-            <Tab
-              // icon={<SettingsRoundedIcon />}
-              // iconPosition="start"
-              label="config"
-            ></Tab>
+            <Tab label="code"></Tab>
+            <Tab label="config"></Tab>
           </Tabs>
         </Box>
-        <Box sx={{ display: 'flex', gap: 1, mr: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1, mr: 1, alignItems: 'center' }}>
+          <SelectSample />
           <FormControlLabel
             label="AutoSync"
             labelPlacement="start"
@@ -69,7 +65,7 @@ const EditorTabs = () => {
           ></FormControlLabel>
 
           {!autoSync && (
-            <IconButton size="small">
+            <IconButton size="small" onClick={() => setUpdateDiagram(true)}>
               <SyncRoundedIcon color="secondary" />
             </IconButton>
           )}
@@ -78,6 +74,11 @@ const EditorTabs = () => {
             size="small"
             color="secondary"
             startIcon={<ArticleRoundedIcon />}
+            onClick={() => {
+              window.open(
+                'https://mermaid.js.org/syntax/xyChart.html#chart-configurations'
+              )
+            }}
           >
             Docs
           </Button>

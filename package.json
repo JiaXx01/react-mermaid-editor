@@ -19,6 +19,9 @@
     "@mui/styled-engine-sc": "6.0.0-alpha.16",
     "ahooks": "^3.7.10",
     "allotment": "^1.20.0",
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
+    "js-base64": "^3.7.7",
     "mermaid": "^10.8.0",
     "monaco-mermaid": "^1.1.0",
     "react": "^18.2.0",
@@ -28,6 +31,7 @@
     "zustand": "^4.5.1"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",

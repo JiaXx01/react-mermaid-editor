@@ -3,15 +3,15 @@ import {
   AppBar,
   Typography,
   FormControlLabel,
-  Switch,
-  Button
+  Switch
 } from '@mui/material'
-import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded'
-import { useState } from 'react'
 import View from './View'
+import { useStore } from '../store'
+import FullScreen from './FullScreen'
 
 const RightContainer = () => {
-  const [isPanAndZoom, setIsPanAndZoom] = useState(false)
+  const panZoom = useStore.use.panZoom()
+  const setPanZoomEnable = useStore.use.setPanZoomEnable()
   return (
     <Box
       sx={{
@@ -37,7 +37,7 @@ const RightContainer = () => {
         <Typography variant="h6" component="div">
           Diagram
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           <FormControlLabel
             label="Pan&Zoom"
             labelPlacement="start"
@@ -45,23 +45,15 @@ const RightContainer = () => {
             control={
               <Switch
                 color="secondary"
-                checked={isPanAndZoom}
-                onChange={(_, value) => setIsPanAndZoom(value)}
+                checked={panZoom}
+                onChange={(_, value) => setPanZoomEnable(value)}
               ></Switch>
             }
           ></FormControlLabel>
-          <Button
-            variant="contained"
-            size="small"
-            color="secondary"
-            startIcon={<FullscreenRoundedIcon />}
-            sx={{ flexGrow: 1, whiteSpace: 'nowrap' }}
-          >
-            Full Screen
-          </Button>
+          <FullScreen />
         </Box>
       </AppBar>
-      <Box sx={{ flex: 1, overflow: 'hidden' }}>
+      <Box sx={{ height: 'calc(100% - 48px)' }}>
         <View />
       </Box>
     </Box>
